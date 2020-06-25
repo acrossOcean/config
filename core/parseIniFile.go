@@ -48,6 +48,13 @@ func (receiver *Config) parseIniData(path string, data []byte) map[string]interf
 	for {
 		line, _, err := buf.ReadLine()
 		if err == io.EOF {
+			if currentSection != "" {
+				result[currentSection] = flatMap(sectionMap)
+			} else {
+				for k, v := range sectionMap {
+					result[k] = v
+				}
+			}
 			break
 		} else if err != nil {
 			logger.Error("获取ini文件:", path, " 错误:", err.Error())
@@ -68,7 +75,13 @@ func (receiver *Config) parseIniData(path string, data []byte) map[string]interf
 
 		if bytes.HasPrefix(line, sectionStart) && bytes.HasSuffix(line, sectionEnd) {
 			// 保留老段落的信息
-			result[currentSection] = sectionMap
+			if currentSection != "" {
+				result[currentSection] = flatMap(sectionMap)
+			} else {
+				for k, v := range sectionMap {
+					result[k] = v
+				}
+			}
 			// 新段落开始
 			currentSection = string(line[1 : len(line)-1])
 			sectionMap = map[string]interface{}{}
@@ -90,7 +103,7 @@ func (receiver *Config) parseIniData(path string, data []byte) map[string]interf
 				v := receiver.parseIniFile(filePath)
 
 				for kk, vv := range v {
-					result[kk] = vv
+					sectionMap[kk] = vv
 				}
 			}
 		}
@@ -102,13 +115,13 @@ func (receiver *Config) parseIniData(path string, data []byte) map[string]interf
 
 		value := bytes.TrimSpace(kvPair[1])
 		if bytes.HasPrefix(value, bDQuote) {
-			result[key] = string(bytes.Trim(value, string(bDQuote)))
+			sectionMap[key] = string(bytes.Trim(value, string(bDQuote)))
 			continue
 		}
 
 		// 判断v 的真实类型
-		result[key] = getRealV(string(value))
+		sectionMap[key] = getRealV(string(value))
 	}
 
-	return result
+	return flatMap(result)
 }
