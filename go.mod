@@ -1,4 +1,4 @@
-module config
+module github.com/acrossOcean/config
 
 go 1.14
 

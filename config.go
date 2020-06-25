@@ -1,6 +1,6 @@
 package config
 
-import "config/core"
+import "github.com/acrossOcean/config/core"
 
 var defConf *core.Config
 
