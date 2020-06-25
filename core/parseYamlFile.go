@@ -1,4 +1,4 @@
-package config
+package core
 
 // todo 下一版完成逻辑
 func (receiver *Config) parseYamlFile(path string) map[string]interface{} {

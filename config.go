@@ -1,20 +1,18 @@
 package config
 
-import (
-	"github.com/acrossOcean/config/config"
-)
+import "config/core"
 
-var defConf *config.Config
+var defConf *core.Config
 
 func init() {
-	defConf = config.NewConfig()
+	defConf = core.NewConfig()
 }
 
 func AddPath(path string, morePath ...string) {
 	defConf.AddPath(path, morePath...)
 }
 
-func SetReadOrder(readOrder config.ReadOrder, moreOrder ...config.ReadOrder) {
+func SetReadOrder(readOrder core.ReadOrder, moreOrder ...core.ReadOrder) {
 	defConf.SetReadOrder(readOrder, moreOrder...)
 }
 

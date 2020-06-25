@@ -1,4 +1,4 @@
-package config
+package core
 
 type ReadOrder int
 
